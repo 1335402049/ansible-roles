@@ -1,0 +1,44 @@
+---
+- name: include variables.
+  include_vars: variables.yml
+
+- name: install dependent package
+  yum: name={{ item }} state=present
+  with_items:
+  - wget
+  - "{{ java }}"
+
+- name: download rpm package
+  shell: cd {{ rpm_path }} && wget {{ rpm_address }}
+
+- name: import jenkins key
+  shell: rpm --import {{ jenkins_rpm_key }}
+
+- name: create directory
+  file: name={{ item }} state=present
+  with_items:
+  - /var/lib/jenkins
+  - /var/log/jenkins
+
+- name: install package
+  yum: name={{ rpm_path }}/{{ jenkins_version  }} state=present
+
+- name: create user
+  user: name=deploy state=present
+
+- name: create group
+  group: name=deploy state=present
+
+- name: copy template
+  template: src=jenkins.j2 dest=/etc/sysconfig/jenkins
+  notify: restart jenkins
+
+- name: change permissions
+  file: path={{ item }} owner=deploy group=deploy 
+  with_items:
+  - /var/lib/jenkins
+  - /var/log/jenkins
+  - /var/cache/jenkins
+
+- name: start jenkins
+  service: name=jenkins state=started enabled=true

@@ -1,0 +1,60 @@
+---
+# 内存优化
+# 根据实际生产机器硬件配置优化
+# 设定内存的永久保存区初始大小
+permSize: "64m"
+
+# 设置内存保存区最大大小
+maxPermSize: "128m"
+
+# 堆内存初试大小，默认是物理机内存的1/64
+xms: "-Xms512m"
+
+# 堆内存最大大小，建议均设为物理内存的一半，不可超过物理内存
+xmx: "-Xmx512m"
+
+# 年轻代的堆内存大小,建议设为Xmx的3、4分之一
+xmn: "-Xmn170m"
+
+# 垃圾收集器优化
+gc_message: "-verbose:gc -XX:+UseConcMarkSweepGC -XX:MaxTenuringThreshold=5 -XX:+ExplicitGCInvokesConcurrent -XX:GCTimeRatio=19 -XX:CMSInitiatingOccupancyFraction=70 -XX:CMSFullGCsBeforeCompaction=0 -Xnoclassgc -XX:SoftRefLRUPolicyMSPerMB=0"
+
+
+# 线程优化
+# 最大线程数
+maxThreads: "600"
+
+# 初始化时创建的线程数
+minSpareThreads: "100"
+
+# 初始化时创建的线程数一旦大于这个值，tomcat就会关闭，不再需要socket线程
+maxSpareThreads: "500"
+
+# 当所有处理请求的线程都被使用后，可以放到处理队列的请求数，超过该值，请求将不予处理
+acceptCount: "700"
+
+# 连接器将在接受连接后等待超时时间
+connectionTimeout: "20000"
+
+# 线程池
+# 最大线程数
+maxThreadsPool: "500"
+
+# 最小空闲线程数
+minSpareThreadsPool: "20"
+
+# 线程最大空闲时间
+maxIdleTime: "60000"
+
+connectionTimeoutPool: "60000"
+
+# 下次请求过来之前，socket连接保持时长
+keepAliveTimeOut: "60000"
+
+maxKeepAliveRequests: "100"
+
+#禁用DNS查询
+enableLookups: "false"
+
+# 设置session过期时间,单位分钟
+session_timeout: 180

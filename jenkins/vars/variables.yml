@@ -1,0 +1,10 @@
+---
+java: java-1.8.0-openjdk-*
+
+rpm_path: /usr/local/src
+
+rpm_address: https://mirrors.tuna.tsinghua.edu.cn/jenkins/redhat-stable/jenkins-2.204.3-1.1.noarch.rpm
+
+jenkins_rpm_key: http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key
+
+jenkins_version: jenkins-2.204.3-1.1.noarch.rpm

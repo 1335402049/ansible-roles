@@ -1,0 +1,39 @@
+---
+- name: include variables.
+  include_vars: variables.yml
+
+- name: install dependency package
+  yum: name={{ item }} state=present
+  with_items:
+  - gcc
+  - wget
+
+- name: wget redis-5.0.3.tar.gz
+  shell: cd {{ redis_install_directory }} && wget http://download.redis.io/releases/redis-5.0.3.tar.gz
+
+- name: unarchive file
+  shell: cd {{ redis_install_directory }} && tar zxvf redis-5.0.3.tar.gz
+
+- name: compile redis
+  shell: cd {{ redis_install_directory }}/redis-5.0.3 && make MALLOC=libc && cd src && make install
+
+- name: create file
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ redis_log }}"
+  - "{{ redis_firing_directory }}"
+
+- name: copy files
+  shell: cp {{ item }} {{ redis_firing_directory }}
+  with_items:
+  - "{{ redis_install_directory }}/redis-5.0.3/src/redis-server"
+  - "{{ redis_install_directory }}/redis-5.0.3/src/redis-cli"
+
+- name: remote copy conf
+  template: src=redis.conf.j2 dest={{ redis_firing_directory }}/redis.conf
+  notify: restart redis
+
+- name: start redis
+  shell: cd {{ redis_firing_directory }} && ./redis-server redis.conf

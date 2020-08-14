@@ -1,0 +1,10 @@
+---
+JENKINS_USER: "deploy"
+
+JENKINS_PORT: "8080"
+
+# http最大连接数
+ENKINS_HANDLER_MAX: "100"
+
+# http最大工作线程数
+JENKINS_HANDLER_IDLE: "20"

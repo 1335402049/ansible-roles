@@ -1,0 +1,6 @@
+---
+- name: include variables.
+  include_vars: variables.yml
+
+- name: restart redis
+  shell: cd {{ redis_firing_directory }} && ./redis-cli -h 127.0.0.1 -p 6379 shutdown && ./redis-server redis.conf

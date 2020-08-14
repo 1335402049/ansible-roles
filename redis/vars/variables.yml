@@ -1,0 +1,4 @@
+---
+redis_install_directory: /usr/local/src
+redis_firing_directory: /usr/local/redis
+redis_log: /var/log/redis

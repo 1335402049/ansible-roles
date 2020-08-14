@@ -1,0 +1,21 @@
+---
+- name: include variables.
+  include_vars: variables.yml
+
+- name: unarchive tar.gz
+  unarchive: copy=yes src=apache-tomcat-8.5.54.tar.gz dest=/usr/local
+
+- name: remote file
+  template: src=catalina.sh.j2 dest=/usr/local/{{ tomcat_name }}/bin/catalina.sh
+
+- name: remote conf
+  template: src={{ item }}.j2 dest=/usr/local/{{ tomcat_name }}/conf/{{ item }}
+  with_items:
+  - server.xml
+  - web.xml
+  notify: restart tomcat
+
+- name: start tomcat
+  shell: |
+    cd /usr/local/{{ tomcat_name }}/bin
+    nohup ./startup.sh
